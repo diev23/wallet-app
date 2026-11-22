@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/transactionListFragment">
+
+    <fragment
+        android:id="@+id/transactionListFragment"
+        android:name="com.Gumbatov.wallet.ui.list.TransactionListFragment"
+        android:label="@string/title_list"
+        tools:layout="@layout/fragment_transaction_list">
+        <action
+            android:id="@+id/action_list_to_edit"
+            app:destination="@id/transactionEditFragment" />
+        <action
+            android:id="@+id/action_list_to_detail"
+            app:destination="@id/transactionDetailFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/transactionEditFragment"
+        android:name="com.Gumbatov.wallet.ui.edit.TransactionEditFragment"
+        android:label="@string/title_edit"
+        tools:layout="@layout/fragment_transaction_edit">
+        <argument
+            android:name="transactionId"
+            android:defaultValue="0L"
+            app:argType="long" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/transactionDetailFragment"
+        android:name="com.Gumbatov.wallet.ui.detail.TransactionDetailFragment"
+        android:label="@string/title_detail"
+        tools:layout="@layout/fragment_transaction_detail">
+        <argument
+            android:name="transactionId"
+            android:defaultValue="0L"
+            app:argType="long" />
+        <action
+            android:id="@+id/action_detail_to_edit"
+            app:destination="@id/transactionEditFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/statsFragment"
+        android:name="com.Gumbatov.wallet.ui.stats.StatsFragment"
+        android:label="@string/title_stats"
+        tools:layout="@layout/fragment_stats" />
+
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.Gumbatov.wallet.ui.settings.SettingsFragment"
+        android:label="@string/title_settings"
+        tools:layout="@layout/fragment_settings" />
+</navigation>

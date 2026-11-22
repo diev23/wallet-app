@@ -1,48 +1,44 @@
 package com.Gumbatov.wallet
 
 import android.os.Bundle
-import android.util.Log
-import androidx.activity.enableEdgeToEdge
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.lifecycle.ViewModelProvider
-import com.Gumbatov.wallet.models.Transaction
-import com.Gumbatov.wallet.viewmodels.TransactionListViewModel
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.setupWithNavController
+import com.Gumbatov.wallet.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
+
+    private lateinit var binding: ActivityMainBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContentView(R.layout.activity_main)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        // Keep the content out from under the status and navigation bars
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, insets ->
+            val bars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            view.setPadding(bars.left, bars.top, bars.right, bars.bottom)
             insets
         }
 
-        // TEMPORARY: forces database creation so we can inspect it (remove on day 3)
-        // TEMPORARY test code (remove at the end of day 3)
-        val viewModel = ViewModelProvider(this)[TransactionListViewModel::class.java]
+        val navHost = supportFragmentManager
+            .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+        val navController = navHost.navController
 
-        viewModel.transactions.observe(this) { list ->
-            Log.d("WalletTest", "Transactions in DB: ${list.size}")
-            list.forEach {
-                Log.d("WalletTest", "${it.transaction.title}, tags=${it.tags.map { tag -> tag.name }}")
+        // The bottom menu switches screens by matching menu item ids with graph ids
+        binding.bottomNav.setupWithNavController(navController)
+
+        // The form and details screens are opened from the list, so no bottom bar there
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            binding.bottomNav.visibility = when (destination.id) {
+                R.id.transactionEditFragment,
+                R.id.transactionDetailFragment -> View.GONE
+                else -> View.VISIBLE
             }
         }
-        viewModel.error.observe(this) { message ->
-            if (message != null) Log.e("WalletTest", message)
-        }
-
-// adds one test transaction to category 1 on every launch
-        viewModel.add(
-            Transaction(
-                title = "Test lunch",
-                amountMinor = 15000,
-                date = System.currentTimeMillis(),
-                categoryId = 1
-            )
-        )
     }
 }

@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Wallet</string>
+    <string name="title_list">Операции</string>
+    <string name="title_edit">Операция</string>
+    <string name="title_detail">Детали</string>
+    <string name="title_stats">Статистика</string>
+    <string name="title_settings">Настройки</string>
 </resources>
