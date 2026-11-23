@@ -13,6 +13,9 @@ import com.Gumbatov.wallet.models.TransactionWithTags
 import com.Gumbatov.wallet.repository.CategoryRepository
 import com.Gumbatov.wallet.repository.TransactionRepository
 import kotlinx.coroutines.launch
+import com.Gumbatov.wallet.models.TransactionItem
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.first
 
 class TransactionListViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -25,6 +28,18 @@ class TransactionListViewModel(application: Application) : AndroidViewModel(appl
 
     val categories: LiveData<List<Category>> =
         categoryRepository.categories.asLiveData()
+    /** Rows for the list screen: each transaction joined with its category. */
+    val items: LiveData<List<TransactionItem>> = combine(
+        transactionRepository.transactions,
+        categoryRepository.categories
+    ) { transactions, categories ->
+        val categoriesById = categories.associateBy { it.id }
+        transactions.mapNotNull { withTags ->
+            val category = categoriesById[withTags.transaction.categoryId]
+                ?: return@mapNotNull null
+            TransactionItem(withTags.transaction, category, withTags.tags)
+        }
+    }.asLiveData()
 
     private val _error = MutableLiveData<String?>()
     val error: LiveData<String?> = _error
@@ -50,5 +65,19 @@ class TransactionListViewModel(application: Application) : AndroidViewModel(appl
                 _error.value = "Не удалось выполнить операцию: ${e.message}"
             }
         }
+    }
+    // TEMPORARY (day 5): lets us test the list before the form exists (day 6)
+    fun addTestTransaction() = launchSafely {
+        val category = categoryRepository.categories.first().firstOrNull()
+            ?: return@launchSafely
+        transactionRepository.add(
+            Transaction(
+                title = "Test ${System.currentTimeMillis() % 1000}",
+                amountMinor = 15000,
+                date = System.currentTimeMillis(),
+                categoryId = category.id
+            ),
+            emptyList()
+        )
     }
 }
