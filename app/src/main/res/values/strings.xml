@@ -1,15 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Wallet</string>
-
     <string name="title_list">Операции</string>
     <string name="title_edit">Операция</string>
     <string name="title_detail">Детали</string>
     <string name="title_stats">Статистика</string>
     <string name="title_settings">Настройки</string>
-
     <string name="empty_title">Пока нет записей</string>
     <string name="empty_hint">Добавьте первую операцию, чтобы начать вести учёт</string>
     <string name="empty_button">Добавить первую</string>
     <string name="add_transaction">Добавить операцию</string>
+    <string name="edit_new">Новая запись</string>
+    <string name="edit_change">Редактирование записи</string>
+    <string name="type_expense">Расход</string>
+    <string name="type_income">Доход</string>
+    <string name="hint_title">Название</string>
+    <string name="hint_amount">Сумма</string>
+    <string name="hint_date">Дата</string>
+    <string name="hint_category">Категория</string>
+    <string name="hint_description">Описание (необязательно)</string>
+    <string name="label_tags">Теги</string>
+    <string name="no_tags_hint">Тегов пока нет — добавьте первый</string>
+    <string name="add_tag">Новый тег</string>
+    <string name="hint_tag_name">Название тега</string>
+    <string name="save">Сохранить</string>
+    <string name="cancel">Отмена</string>
+    <string name="edit">Редактировать</string>
+    <string name="delete">Удалить</string>
+    <string name="error_title_empty">Введите название</string>
+    <string name="error_amount">Введите сумму больше 0</string>
+    <string name="error_category">Выберите категорию</string>
+    <string name="error_tag_empty">Введите название тега</string>
+    <string name="error_fix_fields">Исправьте поля, выделенные красным</string>
+    <string name="confirm_delete_title">Удалить запись?</string>
+    <string name="confirm_delete_message">Это действие нельзя отменить.</string>
+    <string name="no_description">Без описания</string>
+    <string name="no_tags">Без тегов</string>
 </resources>

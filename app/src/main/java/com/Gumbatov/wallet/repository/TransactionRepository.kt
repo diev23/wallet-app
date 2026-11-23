@@ -15,6 +15,7 @@ class TransactionRepository(private val db: AppDatabase) {
 
     suspend fun getById(id: Long): TransactionWithTags? = transactionDao.getWithTagsById(id)
 
+
     /** Saves a new transaction and links its tags in one database transaction. */
     suspend fun add(transaction: Transaction, tagIds: List<Long>): Long =
         db.withTransaction {
@@ -32,4 +33,7 @@ class TransactionRepository(private val db: AppDatabase) {
         }
 
     suspend fun delete(transaction: Transaction) = transactionDao.delete(transaction)
+
+    fun observe(id: Long): Flow<TransactionWithTags?> =
+        transactionDao.observeWithTagsById(id)
 }

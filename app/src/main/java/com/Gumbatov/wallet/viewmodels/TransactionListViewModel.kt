@@ -47,14 +47,10 @@ class TransactionListViewModel(application: Application) : AndroidViewModel(appl
     fun add(transaction: Transaction, tagIds: List<Long> = emptyList()) =
         launchSafely { transactionRepository.add(transaction, tagIds) }
 
-    fun update(transaction: Transaction, tagIds: List<Long> = emptyList()) =
-        launchSafely { transactionRepository.update(transaction, tagIds) }
-
     fun delete(transaction: Transaction) =
         launchSafely { transactionRepository.delete(transaction) }
 
-    fun deleteCategory(category: Category) =
-        launchSafely { categoryRepository.delete(category) }
+
 
     /** Runs a database action in the background; a failure becomes a message, not a crash. */
     private fun launchSafely(action: suspend () -> Unit) {
@@ -65,19 +61,5 @@ class TransactionListViewModel(application: Application) : AndroidViewModel(appl
                 _error.value = "Не удалось выполнить операцию: ${e.message}"
             }
         }
-    }
-    // TEMPORARY (day 5): lets us test the list before the form exists (day 6)
-    fun addTestTransaction() = launchSafely {
-        val category = categoryRepository.categories.first().firstOrNull()
-            ?: return@launchSafely
-        transactionRepository.add(
-            Transaction(
-                title = "Test ${System.currentTimeMillis() % 1000}",
-                amountMinor = 15000,
-                date = System.currentTimeMillis(),
-                categoryId = category.id
-            ),
-            emptyList()
-        )
     }
 }

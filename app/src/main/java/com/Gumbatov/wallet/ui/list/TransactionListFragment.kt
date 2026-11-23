@@ -51,9 +51,7 @@ class TransactionListFragment : Fragment(R.layout.fragment_transaction_list) {
     }
 
     private fun onAddClicked() {
-        // TEMPORARY (day 5): adds a test row. On day 6 replace with:
-        // findNavController().navigate(R.id.action_list_to_edit)
-        viewModel.addTestTransaction()
+        findNavController().navigate(R.id.action_list_to_edit)
     }
 
     override fun onDestroyView() {
