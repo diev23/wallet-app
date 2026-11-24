@@ -13,8 +13,21 @@ object Formatters {
     private const val MAX_AMOUNT_MINOR = 100_000_000_000L
 
     /** 15050 -> "150,50"; a negative balance keeps its minus sign. */
+    /** Symbol of the selected currency; set at start and when the setting changes. */
+    var currencySymbol: String = "₼"
+
+    /** Amount in kopecks to text: 15000 -> "-150,00 ₼" for an expense, "+150,00 ₼" for income. */
+    fun formatAmount(amountMinor: Long, isIncome: Boolean): String {
+        val sign = if (isIncome) "+" else "-"
+        val value = BigDecimal.valueOf(amountMinor, 2)
+        return sign + String.format(Locale.getDefault(), "%,.2f", value) + " " + currencySymbol
+    }
+
+    /** 15050 -> "150,50 ₼"; a negative balance keeps its minus sign. */
     fun formatMoney(amountMinor: Long): String =
-        String.format(Locale.getDefault(), "%,.2f", BigDecimal.valueOf(amountMinor, 2))
+        String.format(Locale.getDefault(), "%,.2f", BigDecimal.valueOf(amountMinor, 2)) +
+                " " + currencySymbol
+
 
     /** "150,5" or "150.50" -> 15050. Returns null if the text is not a valid amount. */
     fun parseAmountMinor(text: String): Long? {
@@ -51,10 +64,5 @@ object Formatters {
     fun formatDate(millis: Long): String = dateFormat.format(Date(millis))
 
     /** Amount in kopecks to text: 15000 -> "-150,00" for an expense, "+150,00" for income. */
-    fun formatAmount(amountMinor: Long, isIncome: Boolean): String {
-        val sign = if (isIncome) "+" else "-"
-        val value = BigDecimal.valueOf(amountMinor, 2)
-        return sign + String.format(Locale.getDefault(), "%,.2f", value)
-    }
 
-}
+    }

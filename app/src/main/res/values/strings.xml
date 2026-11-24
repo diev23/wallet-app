@@ -65,4 +65,15 @@
     <string name="stats_no_expenses">Нет расходов за период</string>
     <string name="stats_empty_title">Нет данных за период</string>
     <string name="stats_empty_hint">Добавьте записи или выберите другой период</string>
+    <string name="settings_theme">Тема</string>
+    <string name="settings_currency">Валюта</string>
+    <string name="settings_default_sort">Сортировка по умолчанию</string>
+    <string name="settings_currency_note">Суммы не пересчитываются, меняется только знак валюты</string>
+    <string name="theme_system">Как в системе</string>
+    <string name="theme_light">Светлая</string>
+    <string name="theme_dark">Тёмная</string>
+    <string name="currency_azn">₼ Манат (AZN)</string>
+    <string name="currency_rub">₽ Рубль (RUB)</string>
+    <string name="currency_usd">$ Доллар (USD)</string>
+    <string name="currency_eur">€ Евро (EUR)</string>
 </resources>

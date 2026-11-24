@@ -19,6 +19,7 @@ import kotlinx.coroutines.flow.first
 import com.Gumbatov.wallet.models.ListFilter
 import com.Gumbatov.wallet.utils.TransactionFilter
 import kotlinx.coroutines.flow.MutableStateFlow
+import com.Gumbatov.wallet.repository.SettingsRepository
 
 class TransactionListViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -45,7 +46,16 @@ class TransactionListViewModel(application: Application) : AndroidViewModel(appl
     fun resetFilters() {
         filter.value = ListFilter(sort = filter.value.sort)
     }
+    private val settingsRepository = SettingsRepository(application)
 
+    init {
+        // The sort order from the settings is applied now and every time it changes.
+        viewModelScope.launch {
+            settingsRepository.defaultSortFlow.collect { sort ->
+                filter.value = filter.value.copy(sort = sort)
+            }
+        }
+    }
     /** What the list screen draws: filtered rows + how many rows exist in total. */
     val listState: LiveData<ListState> = combine(
         transactionRepository.transactions,
