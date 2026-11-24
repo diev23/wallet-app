@@ -16,6 +16,9 @@ import kotlinx.coroutines.launch
 import com.Gumbatov.wallet.models.TransactionItem
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
+import com.Gumbatov.wallet.models.ListFilter
+import com.Gumbatov.wallet.utils.TransactionFilter
+import kotlinx.coroutines.flow.MutableStateFlow
 
 class TransactionListViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -29,16 +32,33 @@ class TransactionListViewModel(application: Application) : AndroidViewModel(appl
     val categories: LiveData<List<Category>> =
         categoryRepository.categories.asLiveData()
     /** Rows for the list screen: each transaction joined with its category. */
-    val items: LiveData<List<TransactionItem>> = combine(
+    private val filter = MutableStateFlow(ListFilter())
+
+    /** Current search / filter / sort values (the fragment reads them to draw the chips). */
+    val currentFilter: ListFilter get() = filter.value
+
+    fun updateFilter(change: (ListFilter) -> ListFilter) {
+        filter.value = change(filter.value)
+    }
+
+    /** Clears the search text and all filters; the chosen sort order stays. */
+    fun resetFilters() {
+        filter.value = ListFilter(sort = filter.value.sort)
+    }
+
+    /** What the list screen draws: filtered rows + how many rows exist in total. */
+    val listState: LiveData<ListState> = combine(
         transactionRepository.transactions,
-        categoryRepository.categories
-    ) { transactions, categories ->
+        categoryRepository.categories,
+        filter
+    ) { transactions, categories, listFilter ->
         val categoriesById = categories.associateBy { it.id }
-        transactions.mapNotNull { withTags ->
+        val all = transactions.mapNotNull { withTags ->
             val category = categoriesById[withTags.transaction.categoryId]
                 ?: return@mapNotNull null
             TransactionItem(withTags.transaction, category, withTags.tags)
         }
+        ListState(items = TransactionFilter.apply(all, listFilter), totalCount = all.size)
     }.asLiveData()
 
     private val _error = MutableLiveData<String?>()
@@ -63,3 +83,4 @@ class TransactionListViewModel(application: Application) : AndroidViewModel(appl
         }
     }
 }
+data class ListState(val items: List<TransactionItem>, val totalCount: Int)

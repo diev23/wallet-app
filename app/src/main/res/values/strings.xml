@@ -36,4 +36,21 @@
     <string name="confirm_delete_message">Это действие нельзя отменить.</string>
     <string name="no_description">Без описания</string>
     <string name="no_tags">Без тегов</string>
+    <string name="search_hint">Поиск по названию, описанию, тегам</string>
+    <string name="filter_type">Тип</string>
+    <string name="filter_type_all">Все типы</string>
+    <string name="filter_type_expense">Расходы</string>
+    <string name="filter_type_income">Доходы</string>
+    <string name="filter_category">Категория</string>
+    <string name="filter_category_all">Все категории</string>
+    <string name="filter_period">Период</string>
+    <string name="filter_sort">Сортировка</string>
+    <string name="sort_date_desc">Сначала новые</string>
+    <string name="sort_date_asc">Сначала старые</string>
+    <string name="sort_amount_desc">Сумма: по убыванию</string>
+    <string name="sort_amount_asc">Сумма: по возрастанию</string>
+    <string name="sort_title">По названию (А–Я)</string>
+    <string name="not_found_title">Ничего не найдено</string>
+    <string name="not_found_hint">Измените запрос или сбросьте фильтры</string>
+    <string name="reset_filters">Сбросить фильтры</string>
 </resources>
