@@ -12,6 +12,10 @@ object Formatters {
     /** Максимальная сумма: 1 000 000 000,00 в копейках. Защита от переполнения. */
     private const val MAX_AMOUNT_MINOR = 100_000_000_000L
 
+    /** 15050 -> "150,50"; a negative balance keeps its minus sign. */
+    fun formatMoney(amountMinor: Long): String =
+        String.format(Locale.getDefault(), "%,.2f", BigDecimal.valueOf(amountMinor, 2))
+
     /** "150,5" or "150.50" -> 15050. Returns null if the text is not a valid amount. */
     fun parseAmountMinor(text: String): Long? {
         val normalized = text.trim().replace(',', '.').replace(" ", "")

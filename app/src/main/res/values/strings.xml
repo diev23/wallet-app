@@ -53,4 +53,16 @@
     <string name="not_found_title">Ничего не найдено</string>
     <string name="not_found_hint">Измените запрос или сбросьте фильтры</string>
     <string name="reset_filters">Сбросить фильтры</string>
+    <string name="stats_period_week">7 дней</string>
+    <string name="stats_period_month">30 дней</string>
+    <string name="stats_period_year">Год</string>
+    <string name="stats_income">Доходы</string>
+    <string name="stats_expense">Расходы</string>
+    <string name="stats_balance">Баланс</string>
+    <string name="stats_average">Средний расход в день</string>
+    <string name="stats_by_category">Расходы по категориям</string>
+    <string name="stats_by_month">Доходы и расходы по месяцам</string>
+    <string name="stats_no_expenses">Нет расходов за период</string>
+    <string name="stats_empty_title">Нет данных за период</string>
+    <string name="stats_empty_hint">Добавьте записи или выберите другой период</string>
 </resources>
