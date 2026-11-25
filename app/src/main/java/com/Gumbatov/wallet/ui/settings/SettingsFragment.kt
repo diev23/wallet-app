@@ -18,6 +18,8 @@ import androidx.core.content.FileProvider
 import com.Gumbatov.wallet.viewmodels.ExportViewModel
 import com.google.android.material.snackbar.Snackbar
 import java.io.File
+import android.content.pm.ApplicationInfo
+import com.Gumbatov.wallet.viewmodels.DemoViewModel
 
 /** Settings screen: theme, currency and the default sort order. */
 class SettingsFragment : Fragment(R.layout.fragment_settings) {
@@ -28,6 +30,8 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
     private val viewModel: SettingsViewModel by viewModels()
 
     private val exportViewModel: ExportViewModel by viewModels()
+
+    private val demoViewModel: DemoViewModel by viewModels()
 
     /** Opens the system share sheet with the CSV file. */
     private fun shareFile(file: File) {
@@ -113,6 +117,14 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                 Snackbar.make(binding.root, message, Snackbar.LENGTH_LONG).show()
                 exportViewModel.messageShown()
             }
+        }
+        // The test-data row exists only in debug builds
+        val isDebug = (requireContext().applicationInfo.flags and ApplicationInfo.FLAG_DEBUGGABLE) != 0
+        binding.rowDemo.visibility = if (isDebug) View.VISIBLE else View.GONE
+        binding.rowDemo.setOnClickListener { demoViewModel.fill(600) }
+        demoViewModel.busy.observe(viewLifecycleOwner) { busy ->
+            binding.demoProgress.visibility = if (busy) View.VISIBLE else View.GONE
+            binding.rowDemo.isEnabled = !busy
         }
     }
 

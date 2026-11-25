@@ -10,7 +10,6 @@ import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
-import kotlin.math.abs
 
 /**
  * Exports transactions to a CSV table that Excel and Google Sheets can open.
@@ -37,7 +36,7 @@ class CsvExporter(private val context: Context) {
 
         val builder = StringBuilder("﻿") // BOM: Excel reads the file as UTF-8
         builder.append(
-            line(
+            CsvFormat.line(
                 listOf(
                     context.getString(R.string.csv_col_date),
                     context.getString(R.string.csv_col_type),
@@ -53,13 +52,13 @@ class CsvExporter(private val context: Context) {
             val transaction = item.transaction
             val category = categories[transaction.categoryId]
             builder.append(
-                line(
+                CsvFormat.line(
                     listOf(
                         dateFormat.format(Date(transaction.date)),
                         if (category?.isIncome == true) incomeLabel else expenseLabel,
                         category?.name.orEmpty(),
                         transaction.title,
-                        plainAmount(transaction.amountMinor),
+                        CsvFormat.amount(transaction.amountMinor),
                         item.tags.joinToString(", ") { it.name },
                         transaction.description
                     )
@@ -69,21 +68,7 @@ class CsvExporter(private val context: Context) {
         return builder.toString()
     }
 
-    /** 123450 -> "1234,50": decimal comma, no currency symbol and no spaces. */
-    private fun plainAmount(amountMinor: Long): String {
-        val value = abs(amountMinor)
-        return "${value / 100},${(value % 100).toString().padStart(2, '0')}"
-    }
 
-    private fun line(cells: List<String>): String = cells.joinToString(";", postfix = "\r\n") { escape(it) }
-
-    /** Quotes a cell if it contains a separator, a quote or a line break. */
-    private fun escape(value: String): String {
-        // A text that starts with = + - @ would be run as a formula by Excel
-        val text = if (value.isNotEmpty() && value[0] in "=+-@") "'" + value else value
-        val needsQuotes = text.any { it == ';' || it == '"' || it == '\n' || it == '\r' }
-        return if (needsQuotes) "\"" + text.replace("\"", "\"\"") + "\"" else text
-    }
 
     private companion object {
         const val EXPORT_DIR = "exports"

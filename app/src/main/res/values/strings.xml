@@ -118,4 +118,6 @@
     <string name="csv_col_amount">Сумма</string>
     <string name="csv_col_tags">Теги</string>
     <string name="csv_col_description">Описание</string>
+    <string name="settings_demo">Добавить 600 тестовых записей</string>
+    <string name="settings_demo_hint">Только для отладки: в релизной версии строка скрыта</string>
 </resources>
