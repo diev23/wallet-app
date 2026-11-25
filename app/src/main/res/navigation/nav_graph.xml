@@ -53,5 +53,24 @@
         android:id="@+id/settingsFragment"
         android:name="com.Gumbatov.wallet.ui.settings.SettingsFragment"
         android:label="@string/title_settings"
-        tools:layout="@layout/fragment_settings" />
+        tools:layout="@layout/fragment_settings">
+
+        <action
+            android:id="@+id/action_settings_to_categories"
+            app:destination="@id/categoriesFragment" />
+
+        <action
+            android:id="@+id/action_settings_to_tags"
+            app:destination="@id/tagsFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/categoriesFragment"
+        android:name="com.Gumbatov.wallet.ui.settings.CategoriesFragment"
+        android:label="@string/title_categories" />
+
+    <fragment
+        android:id="@+id/tagsFragment"
+        android:name="com.Gumbatov.wallet.ui.settings.TagsFragment"
+        android:label="@string/title_tags" />
 </navigation>

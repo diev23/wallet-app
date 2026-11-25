@@ -11,6 +11,7 @@ import com.Gumbatov.wallet.models.SortOrder
 import com.Gumbatov.wallet.models.ThemeMode
 import com.Gumbatov.wallet.viewmodels.SettingsViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import androidx.navigation.fragment.findNavController
 
 /** Settings screen: theme, currency and the default sort order. */
 class SettingsFragment : Fragment(R.layout.fragment_settings) {
@@ -25,6 +26,13 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         _binding = FragmentSettingsBinding.bind(view)
 
         renderValues()
+
+        binding.rowCategories.setOnClickListener {
+            findNavController().navigate(R.id.action_settings_to_categories)
+        }
+        binding.rowTags.setOnClickListener {
+            findNavController().navigate(R.id.action_settings_to_tags)
+        }
 
         binding.rowTheme.setOnClickListener {
             showChoiceDialog(
