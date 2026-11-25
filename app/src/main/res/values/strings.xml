@@ -104,4 +104,18 @@
     <string name="color_blue">Синий</string>
     <string name="color_purple">Фиолетовый</string>
     <string name="color_gray">Серый</string>
+    <string name="settings_export">Экспорт данных</string>
+    <string name="settings_export_hint">Сохранить все операции в таблицу CSV (открывается в Excel)</string>
+    <string name="export_empty">Нет данных для экспорта</string>
+    <string name="export_failed">Не удалось создать файл. Попробуйте ещё раз</string>
+    <string name="export_no_app">Нет приложения, которое может принять файл</string>
+    <string name="export_subject">Операции из «Кошелька»</string>
+    <string name="export_chooser">Отправить файл</string>
+    <string name="csv_col_date">Дата</string>
+    <string name="csv_col_type">Тип</string>
+    <string name="csv_col_category">Категория</string>
+    <string name="csv_col_title">Название</string>
+    <string name="csv_col_amount">Сумма</string>
+    <string name="csv_col_tags">Теги</string>
+    <string name="csv_col_description">Описание</string>
 </resources>

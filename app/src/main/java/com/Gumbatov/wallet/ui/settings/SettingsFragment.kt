@@ -12,6 +12,12 @@ import com.Gumbatov.wallet.models.ThemeMode
 import com.Gumbatov.wallet.viewmodels.SettingsViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import androidx.navigation.fragment.findNavController
+import android.content.ActivityNotFoundException
+import android.content.Intent
+import androidx.core.content.FileProvider
+import com.Gumbatov.wallet.viewmodels.ExportViewModel
+import com.google.android.material.snackbar.Snackbar
+import java.io.File
 
 /** Settings screen: theme, currency and the default sort order. */
 class SettingsFragment : Fragment(R.layout.fragment_settings) {
@@ -20,6 +26,29 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
     private val binding get() = _binding!!
 
     private val viewModel: SettingsViewModel by viewModels()
+
+    private val exportViewModel: ExportViewModel by viewModels()
+
+    /** Opens the system share sheet with the CSV file. */
+    private fun shareFile(file: File) {
+        val uri = FileProvider.getUriForFile(
+            requireContext(),
+            "${requireContext().packageName}.fileprovider",
+            file
+        )
+        val intent = Intent(Intent.ACTION_SEND).apply {
+            type = "text/csv"
+            putExtra(Intent.EXTRA_STREAM, uri)
+            putExtra(Intent.EXTRA_SUBJECT, getString(R.string.export_subject))
+            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        }
+        try {
+            startActivity(Intent.createChooser(intent, getString(R.string.export_chooser)))
+        } catch (e: ActivityNotFoundException) {
+            // No app can accept the file: show a message instead of crashing
+            Snackbar.make(binding.root, R.string.export_no_app, Snackbar.LENGTH_LONG).show()
+        }
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -65,6 +94,24 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
             ) { order ->
                 viewModel.setDefaultSort(order)
                 renderValues()
+            }
+        }
+        binding.rowExport.setOnClickListener { exportViewModel.export() }
+
+        exportViewModel.exporting.observe(viewLifecycleOwner) { busy ->
+            binding.exportProgress.visibility = if (busy) View.VISIBLE else View.GONE
+            binding.rowExport.isEnabled = !busy
+        }
+        exportViewModel.file.observe(viewLifecycleOwner) { file ->
+            if (file != null) {
+                shareFile(file)
+                exportViewModel.fileHandled()
+            }
+        }
+        exportViewModel.message.observe(viewLifecycleOwner) { message ->
+            if (message != null) {
+                Snackbar.make(binding.root, message, Snackbar.LENGTH_LONG).show()
+                exportViewModel.messageShown()
             }
         }
     }
